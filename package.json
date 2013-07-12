@@ -1,0 +1,23 @@
+{
+  "name": "pairmatic",
+  "license": "AGPLv3",
+  "version": "0.0.0",
+  "description": "A real-time multi-browser programmer-pair assignment web app, integrated with Pivotal Tracker",
+  "author": "Glen E. Ivey (https://github.com/gleneivey)",
+  "keywords": ["pair", "team", "remote", "whiteboard", "organize", "assign", "pivotal tracker", "pivotaltracker", "tracker"],
+  "homepage": "https://github.com/gleneivey/pairmatic2",
+  "bugs": "https://github.com/gleneivey/pairmatic2/issues",
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gleneivey2/pairmatic.git"
+  },
+
+  "engines": { "node": "0.10.x" },
+  "dependencies": {
+    "restify": "2.6.0"
+  },
+  "devDependencies": {
+    "jasmine-node": "1.10.2"
+  }
+}
