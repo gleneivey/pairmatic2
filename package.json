@@ -18,8 +18,10 @@
 
   "engines": { "node": "0.10.x" },
   "dependencies": {
+    "underscore": "1.5.1",
     "restify": "2.6.0",
-    "mongoose": "3.6.15"
+    "mongoose": "3.6.15",
+    "mpromise": "0.3.0"
   },
   "devDependencies": {
     "jasmine-node": "~1.10.2",

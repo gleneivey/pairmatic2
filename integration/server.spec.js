@@ -4,10 +4,10 @@ describe("server's 'hello' endpoint", function() {
   it("should respond with 'hello world'", function(done) {
     var response_body = null;
 
-    waits(400);
+    waits(10000);
 
     runs(function() {
-      request("http://localhost:8080/hello/world",
+      request("http://localhost:8889/hello/world",
           function(error, response, body){
         response_body = body;
       });
