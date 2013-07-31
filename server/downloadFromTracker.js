@@ -1,56 +1,7 @@
-var config = require('../config');
+    //////// covered by unit tests ////////
 
 var _ = require('underscore');
-var https = require('https');
-var mongoose = require('mongoose');
-var Promise = require('mpromise');
 
-
-var configurationSchema = mongoose.Schema({ apiToken: String });
-var Configuration = mongoose.model('Configuration', configurationSchema);
-
-
-var downloadPromise = new Promise();
-
-
-function initializeServer() {
-  var serverConfigurationData;
-
-  Configuration.findOne().exec()
-    .then(function(config) { serverConfigurationData = config; })
-    .then(function() {
-      loadProjectsList(serverConfigurationData)
-        .then(function(projectList) {
-          downloadPromise.fulfill(serverConfigurationData,projectList,generateListOfPeople(projectList));
-        })
-        .then(logResults);
-    });
-}
-
-function loadProjectsList(serverConfigurationData) {
-  var promiseProjectList = new Promise();
-  https.get(
-      {
-        hostname: 'www.pivotaltracker.com',
-        path: '/services/v5/projects?date_format=millis&' +
-            'fields=name,version,stories(name,story_type,current_state,owned_by_id,requested_by_id,estimate,comments(person_id)),' +
-            'memberships(person,role,last_viewed_at)',
-        headers: {
-            'X-TrackerToken': serverConfigurationData.apiToken
-        }
-      }, function(response) {
-        var dataChunks = [];
-        response
-          .on('data', function(chunk) { dataChunks.push(chunk.toString()); })
-          .on('end', function() {
-            var body = dataChunks.join('');
-            projectList = JSON.parse(body);
-            promiseProjectList.fulfill(projectList);
-          });
-      }
-  );
-  return promiseProjectList;
-}
 
 function generateListOfPeople(projectList) {
   var people = {};
@@ -86,6 +37,64 @@ function generateListOfPeople(projectList) {
 }
 
 
+
+    //////// covered only by integration tests ////////
+
+var config = require('../config');
+
+var https = require('https');
+var mongoose = require('mongoose');
+var Promise = require('mpromise');
+
+
+var configurationSchema = mongoose.Schema({ apiToken: String });
+var Configuration = mongoose.model('Configuration', configurationSchema);
+
+
+function initializeServer() {
+  var serverConfigurationData;
+
+  Configuration.findOne().exec()
+    .then(function(config) { serverConfigurationData = config; })
+    .then(function() {
+      loadProjectsList(serverConfigurationData)
+        .then(function(projectList) {
+          downloadPromise.fulfill(serverConfigurationData,projectList,generateListOfPeople(projectList));
+        })
+        .then(logResults);
+    });
+}
+
+
+var downloadPromise = new Promise();
+
+function loadProjectsList(serverConfigurationData) {
+  var promiseProjectList = new Promise();
+  https.get(
+      {
+        hostname: 'www.pivotaltracker.com',
+        path: '/services/v5/projects?date_format=millis&' +
+            'fields=name,version,stories(name,story_type,current_state,owned_by_id,requested_by_id,estimate,comments(person_id)),' +
+            'memberships(person,role,last_viewed_at)',
+        headers: {
+            'X-TrackerToken': serverConfigurationData.apiToken
+        }
+      }, function(response) {
+        var dataChunks = [];
+        response
+          .on('data', function(chunk) { dataChunks.push(chunk.toString()); })
+          .on('end', function() {
+            var body = dataChunks.join('');
+            projectList = JSON.parse(body);
+            promiseProjectList.fulfill(projectList);
+          });
+      }
+  );
+
+  return promiseProjectList;
+}
+
+
 function doit() {
   mongoose.connect(config.mongoUri);
   var db = mongoose.connection;
@@ -97,3 +106,4 @@ function doit() {
 }
 
 module.exports.doit = doit;
+module.exports.generateListOfPeople = generateListOfPeople;

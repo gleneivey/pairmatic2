@@ -8,7 +8,7 @@ var people = {};
 
 
         //// obtain initial data from Pivotal Tracker
-require('./lib/downloadFromTracker')
+require('./server/downloadFromTracker')
   .doit()
   .onFulfill(function(sCD, pL, p) {
     serverConfigurationData = sCD;

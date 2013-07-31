@@ -30,7 +30,6 @@
     "grunt-cli": "~0.1.9",
     "grunt-forever": "~0.4.1",
     "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-jasmine": "~0.5.1",
     "grunt-contrib-jasmine-node": "~0.1.1"
   }
 }
