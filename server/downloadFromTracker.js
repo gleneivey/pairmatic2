@@ -4,6 +4,16 @@ var _ = require('underscore');
 
 
 function generateListOfPeople(projectList) {
+  var peopleById = extractPeopleFromProject(projectList);
+  markPeopleActiveFromStoryData(peopleById, projectList);
+  return peopleById;
+}
+module.exports.generateListOfPeople = generateListOfPeople;
+
+
+
+
+function extractPeopleFromProject(projectList) {
   var people = {};
 
   console.log("----------------------------------------------------");
@@ -25,15 +35,35 @@ function generateListOfPeople(projectList) {
     });
   });
 
-  people = _.chain(people)
-    .sortBy(function(membership) {
-      if (typeof membership.last_viewed_at === 'undefined') { membership.last_viewed_at = 0; }
-      return membership.last_viewed_at;
-    })
-    .reverse()
-    .value();
-
   return people;
+}
+
+function markPeopleActiveFromStoryData(peopleById, projectList) {
+  _(projectList).each(function(project) {
+    _(project.stories).each(function(story) {
+      if (peopleById[story.requested_by_id]) {
+        peopleById[story.requested_by_id].active = true;
+      }
+
+      var owner_id = story.owned_by_id;
+      if (owner_id && peopleById[owner_id]) {
+        peopleById[owner_id].active = true;
+      }
+
+      _(story.comments).each(function(comment) {
+        if (peopleById[comment.person_id]) {
+          peopleById[comment.person_id].active = true;
+        }
+      });
+    });
+    _(project.epics).each(function(epic) {
+      _(epic.comments).each(function(comment) {
+        if (peopleById[comment.person_id]) {
+          peopleById[comment.person_id].active = true;
+        }
+      });
+    });
+  });
 }
 
 
@@ -75,7 +105,7 @@ function loadProjectsList(serverConfigurationData) {
         hostname: 'www.pivotaltracker.com',
         path: '/services/v5/projects?date_format=millis&' +
             'fields=name,version,stories(name,story_type,current_state,owned_by_id,requested_by_id,estimate,comments(person_id)),' +
-            'memberships(person,role,last_viewed_at)',
+            'epics(comments(person_id)),memberships(person,role,last_viewed_at)',
         headers: {
             'X-TrackerToken': serverConfigurationData.apiToken
         }
@@ -106,4 +136,3 @@ function doit() {
 }
 
 module.exports.doit = doit;
-module.exports.generateListOfPeople = generateListOfPeople;
