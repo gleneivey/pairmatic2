@@ -79,7 +79,19 @@ var Promise = require('mpromise');
 
 var configurationSchema = mongoose.Schema({ apiToken: String });
 var Configuration = mongoose.model('Configuration', configurationSchema);
+var personSchema = mongoose.Schema({
+    id: Integer,
+    name: String,
+    username: String,
+    initials: String,
+    email: String,
+    autoState: String,
+    explicitState: String
+});
+var Person = mongoose.model('Person', personSchema);
 
+
+var downloadPromise = new Promise();
 
 function initializeServer() {
   var serverConfigurationData;
@@ -89,14 +101,17 @@ function initializeServer() {
     .then(function() {
       loadProjectsList(serverConfigurationData)
         .then(function(projectList) {
-          downloadPromise.fulfill(serverConfigurationData,projectList,generateListOfPeople(projectList));
+          downloadPromise.fulfill(
+              serverConfigurationData,
+              projectList,
+              generateListOfPeople(projectList)
+          );
         })
-        .then(logResults);
+
+;
     });
 }
 
-
-var downloadPromise = new Promise();
 
 function loadProjectsList(serverConfigurationData) {
   var promiseProjectList = new Promise();
