@@ -80,13 +80,13 @@ var Promise = require('mpromise');
 var configurationSchema = mongoose.Schema({ apiToken: String });
 var Configuration = mongoose.model('Configuration', configurationSchema);
 var personSchema = mongoose.Schema({
-    id: Integer,
+    id: Number,
     name: String,
     username: String,
     initials: String,
     email: String,
-    autoState: String,
-    explicitState: String
+    autoStatus: String,
+    explicitStatus: String
 });
 var Person = mongoose.model('Person', personSchema);
 
@@ -94,21 +94,23 @@ var Person = mongoose.model('Person', personSchema);
 var downloadPromise = new Promise();
 
 function initializeServer() {
-  var serverConfigurationData;
+  var serverConfigurationData, peopleById;
 
   Configuration.findOne().exec()
     .then(function(config) { serverConfigurationData = config; })
     .then(function() {
       loadProjectsList(serverConfigurationData)
         .then(function(projectList) {
+          peopleById = generateListOfPeople(projectList);
           downloadPromise.fulfill(
               serverConfigurationData,
               projectList,
-              generateListOfPeople(projectList)
+              peopleById
           );
         })
-
-;
+        .then(function() {
+          updatePeopleInDbFromProjects(peopleById);
+        });
     });
 }
 
@@ -137,6 +139,37 @@ function loadProjectsList(serverConfigurationData) {
   );
 
   return promiseProjectList;
+}
+
+function updatePeopleInDbFromProjects(peopleById) {
+  _(_(peopleById).keys()).each(function(personId) {
+    Person.find({ id: personId }, function(err, people) {
+      if (err) { throw "unhandled error"; }
+      if (people.length > 1) { throw "unhandled error"; }
+
+      var membership = peopleById[personId];
+
+      if (people.length == 1) {
+        var person_hash = membership.person;
+        var db_person = people[0];
+
+        db_person.name = person_hash.name;
+        db_person.username = person_hash.username;
+        db_person.initials = person_hash.initials;
+        db_person.email = person_hash.email;
+        db_person.autoStatus = (membership.active ? 'active' : 'inactive');
+
+        db_person.save();
+      }
+      else {
+	var person = _.clone(membership.person);
+        person.autoStatus = membership.active ? 'active' : 'inactive';
+        person.explicitStatus = '';
+
+        (new Person(person)).save();
+      }
+    });
+  });
 }
 
 
