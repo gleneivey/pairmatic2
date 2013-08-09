@@ -24,6 +24,7 @@
     "mpromise": "0.3.0"
   },
   "devDependencies": {
+    "universal-jst": "~1.0.5",
     "jasmine-node": "~1.10.2",
     "request": "~2.22.0",
     "grunt": "~0.4.1",

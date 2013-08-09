@@ -1,11 +1,10 @@
-Libraries
-Samples
+config.js
+client/js/templates.js
 node_modules
 
-config.js
-
-PairMatic-*.tgz
-npm-debug.log
 *~
 *.out
 *.log
+
+Libraries
+Samples

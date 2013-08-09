@@ -26,5 +26,6 @@
       }
   });
 
-  require(views, pairmatic.initialize);
+  var requireds = ['templates'].concat(views);
+  require(requireds, pairmatic.initialize);
 }).call(this);
