@@ -66,6 +66,26 @@ function markPeopleActiveFromStoryData(peopleById, projectList) {
   });
 }
 
+var TOO_BIG_TO_BE_MILLIS = 100000000000000;
+function logResults(peopleById) {
+  console.log("----------------------------------------------------");
+  console.log(_(peopleById).keys().length + " unique members");
+  var people = _(peopleById).values();
+  _.chain(people)
+      .sortBy(function(membership) {
+        var baseline = membership.active ? TOO_BIG_TO_BE_MILLIS : 0;
+        if (typeof membership.last_viewed_at === 'undefined') { return baseline; }
+        return baseline + membership.last_viewed_at;
+      })
+      .reverse()
+      .each(function(membership) {
+        var lastViewedAt = (typeof membership.last_viewed_at === 'undefined') ?
+            '    undefined' : membership.last_viewed_at;
+        var activity = membership.active ? " (active) " : "(inactive)";
+        console.log("    " + lastViewedAt + ":  " + activity + " " + membership.person.id + " " + membership.person.name);
+      });
+}
+module.exports.logResults = logResults;
 
 
     //////// covered only by integration tests ////////

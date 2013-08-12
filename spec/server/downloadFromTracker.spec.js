@@ -60,6 +60,48 @@ describe("downloadFromTracker", function() {
     });
   });
 
+  describe("#logResults(peopleById) -> calls console.log() with output", function() {
+    var collectedLogLines;
+    beforeEach(function() {
+      collectedLogLines = '';
+      spyOn(console, 'log').andCallFake(function(message) {
+        collectedLogLines += message;
+        collectedLogLines += "\n";
+      });
+    });
+
+    it("generates output for one person", function() {
+      var peopleById = {};
+      downloadFromTracker.logResults(peopleById);
+      expect(collectedLogLines).toEqual(
+"----------------------------------------------------\n0 unique members\n"
+      );
+    });
+
+    it("generates output for one person", function() {
+      var peopleById = {
+          '10': {
+              'role': 'member',
+              'id': '1010',
+              'person': {
+		  'email': 'alpha+pairmatic@example.com',
+		  'username': "alpha's pairmatic",
+		  'initials': 'apm',
+		  'name': "PairMatic role user for Alpha's team",
+		  'kind': 'person',
+		  'id': 10
+              }
+          }
+      };
+
+      downloadFromTracker.logResults(peopleById);
+
+      expect(collectedLogLines).toEqual(
+"----------------------------------------------------\n1 unique members\n        undefined:  (inactive) 10 PairMatic role user for Alpha's team\n"
+      );
+    });
+  });
+
 
   function findPerson(name) {
     return _(listOfPeople).detect(function(person) {
