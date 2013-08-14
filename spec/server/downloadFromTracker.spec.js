@@ -6,9 +6,25 @@ var downloadFromTracker = require('../../server/downloadFromTracker');
 
 var listOfPeople;
 describe("downloadFromTracker", function() {
+  var collectedLogLines;
+  beforeEach(function() {
+    collectedLogLines = '';
+    spyOn(console, 'log').andCallFake(function(message) {
+      collectedLogLines += message;
+      collectedLogLines += "\n";
+    });
+  });
+
   describe("#generateListOfPeople(projectList) -> peopleById", function() {
     it("works with an empty list", function() {
       expect(downloadFromTracker.generateListOfPeople([])).toEqual({});
+    });
+
+    it("logs the projects loaded from Tracker", function() {
+      downloadFromTracker.generateListOfPeople(projectList);
+      expect(collectedLogLines).toEqual(
+"----------------------------------------------------\nReceived project 'Develop New Cruiser (White Star)' (id #17), 5 memberships\nReceived project 'Transport Babylon 4 Back in Time' (id #4), 3 memberships\n"
+);
     });
 
     it("handles a typical project list", function() {
@@ -61,15 +77,6 @@ describe("downloadFromTracker", function() {
   });
 
   describe("#logResults(peopleById) -> calls console.log() with output", function() {
-    var collectedLogLines;
-    beforeEach(function() {
-      collectedLogLines = '';
-      spyOn(console, 'log').andCallFake(function(message) {
-        collectedLogLines += message;
-        collectedLogLines += "\n";
-      });
-    });
-
     it("generates output for one person", function() {
       var peopleById = {};
       downloadFromTracker.logResults(peopleById);

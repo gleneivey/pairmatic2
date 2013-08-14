@@ -18,7 +18,7 @@ function extractPeopleFromProject(projectList) {
 
   console.log("----------------------------------------------------");
   _(projectList).each(function(project) {
-    console.log("Received project '" + project.name + "', " + project.memberships.length + " memberships");
+    console.log("Received project '" + project.name + "' (id #" + project.id +"), " + project.memberships.length + " memberships");
 
     _(project.memberships).each(function(membership) {
       if (typeof people[membership.person.id] === 'undefined') {
