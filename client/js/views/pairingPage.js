@@ -11,7 +11,6 @@
     },
 
     render: function() {
-console.log(this.$el[0]);
       this.$el.html( JST['pairingPage']() );
       return this;
     }

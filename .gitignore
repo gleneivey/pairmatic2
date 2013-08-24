@@ -1,6 +1,7 @@
 config.js
 client/js/templates.js
 node_modules
+forever
 
 *~
 *.out

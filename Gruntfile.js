@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask(
     'integration',
-    "Run integration tests against a freshly-launched server",
+    "Run HTTP and browser integration tests against a freshly-launched server",
     [
       'forever:start',
           'jasmine-setup:integration', 'jasmine-node',
