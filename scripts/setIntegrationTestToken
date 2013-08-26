@@ -1,0 +1,2 @@
+/usr/local/mongodb/bin/mongo localhost/pairmatic_test --eval 'db.configurations.insert({apiToken: "7bc153b4c2794d31613942129eae1932"})'
+#/usr/local/mongodb/bin/mongo localhost/pairmatic_test --eval 'db.configurations.update( {}, { $set: { "apiToken" : "7bc153b4c2794d31613942129eae1932" } } )'

@@ -194,7 +194,12 @@ function updatePeopleInDbFromProjects(peopleById) {
 
 
 function doit() {
-  mongoose.connect(config.mongoUri);
+  var dbRootName = config.mongoUri;
+  if (process.env.PAIRMATIC_DB_EXTENSION) {
+    dbRootName += process.env.PAIRMATIC_DB_EXTENSION;
+  }
+
+  mongoose.connect(dbRootName);
   var db = mongoose.connection;
   db
     .on('error', console.error.bind(console, 'connection error:'))

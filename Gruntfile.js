@@ -4,6 +4,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     jshint: { all: ['Gruntfile.js', 'server.js', 'integration/**/*.js'] },
     forever: { options: { index: 'server.js' } },
+    env: { test: { PAIRMATIC_DB_EXTENSION: "_test" } },
     "jasmine-node": {
       run: { spec: "place holder" } // replaced at runtime from configsForJasmineNode
     }
@@ -17,6 +18,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-jasmine-node');
   grunt.loadNpmTasks('grunt-forever');
+  grunt.loadNpmTasks('grunt-env');
 
 
 
@@ -24,7 +26,7 @@ module.exports = function(grunt) {
     'integration',
     "Run HTTP and browser integration tests against a freshly-launched server",
     [
-      'forever:start',
+      'env:test', 'forever:start',
           'jasmine-setup:integration', 'jasmine-node',
       'forever:stop'
     ]
