@@ -8,7 +8,7 @@ describe("Client initial load", function() {
           expect(err).toBeNull();
           expect(result).toEqual("What ho! Content from a Handlebars template.");
           se.sayDone();
-        })
+        });
 
     se.waitsForDone();
   });

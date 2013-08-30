@@ -9,11 +9,14 @@ var peopleById = {};
 
         //// obtain initial data from Pivotal Tracker
 var dFT = require('./server/downloadFromTracker');
+var om = require('./server/om');
+
 dFT.doit()
   .onFulfill(function(sCD, pL, pBI) {
     serverConfigurationData = sCD;
     projectList = pL;
     peopleById = pBI;
+    om.init(projectList, peopleById);
     dFT.logResults(peopleById);
   });
 
@@ -24,13 +27,9 @@ dFT.doit()
 var restify = require('restify');
 var server = restify.createServer();
 
-//server.get(/\/client\/.*/, restify.serveStatic({
-//    directory: './client/'
-//}));
-
-function respond(req, res, next) { res.send('hello ' + req.params.name); }
-server.get('/hello/:name', respond);
-server.head('/hello/:name', respond);
+om.init(projectList, peopleById);
+server.get('/om', om.respond);
+server.head('/om', om.respond);
 
 server.get(/^\/.*$/, restify.serveStatic({
     directory: './client/',

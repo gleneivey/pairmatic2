@@ -11,7 +11,7 @@
     },
 
     render: function() {
-      this.$el.html( JST['pairingPage']() );
+      this.$el.html( JST['client/js/templates/pairingPage.hbs']() );
       return this;
     }
   });

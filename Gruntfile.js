@@ -3,6 +3,9 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: { all: ['Gruntfile.js', 'server.js', 'integration/**/*.js'] },
+    handlebars: { compile: {
+        files: { "client/js/templates.js": ["client/js/templates/*.hbs"] }
+    } },
     forever: { options: { index: 'server.js' } },
     env: { test: { PAIRMATIC_DB_EXTENSION: "_test" } },
     "jasmine-node": {
@@ -15,18 +18,18 @@ module.exports = function(grunt) {
     "integration": { run: { spec: "integration" } }
   };
 
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-jasmine-node');
-  grunt.loadNpmTasks('grunt-forever');
   grunt.loadNpmTasks('grunt-env');
-
+  grunt.loadNpmTasks('grunt-forever');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-handlebars');
+  grunt.loadNpmTasks('grunt-contrib-jasmine-node');
 
 
   grunt.registerTask(
     'integration',
     "Run HTTP and browser integration tests against a freshly-launched server",
     [
-      'env:test', 'forever:start',
+      'handlebars', 'env:test', 'forever:start',
           'jasmine-setup:integration', 'jasmine-node',
       'forever:stop'
     ]

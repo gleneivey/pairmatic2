@@ -21,24 +21,19 @@ describe("downloadFromTracker", function() {
     });
 
     it("logs the projects loaded from Tracker", function() {
-      downloadFromTracker.generateListOfPeople(projectList);
+      downloadFromTracker.generateListOfPeople(JSON.parse(JSON.stringify(projectList)));
       expect(collectedLogLines).toEqual(
-"----------------------------------------------------\nReceived project 'Develop New Cruiser (White Star)' (id #17), 5 memberships\nReceived project 'Transport Babylon 4 Back in Time' (id #4), 3 memberships\n"
+"----------------------------------------------------\nReceived project 'Develop New Cruiser (White Star)' (id #17), 5 memberships\nReceived project 'Transport Babylon 4 Back in Time' (id #4), 4 memberships\n"
 );
     });
 
     it("handles a typical project list", function() {
-      var totalNumberOfMemberships = 0;
-      _(projectList).each(function(project) {
-        totalNumberOfMemberships += project.memberships.length;
-      });
-
-      var peopleById = downloadFromTracker.generateListOfPeople(projectList);
+      var peopleById = downloadFromTracker.generateListOfPeople(JSON.parse(JSON.stringify(projectList)));
       var listOfPeople = _(peopleById).values();
       expect(listOfPeople.length)
-        .toEqual(totalNumberOfMemberships - 1);
+        .toEqual(7);
       expect(_.chain(listOfPeople)
-        .map(function(person) { return person.person.username; })
+        .map(function(person) { return person.username; })
         .sort().value()
       ).toEqual([ 'Inesval', 'draal', 'jeff', 'jenimer', 'pairmatic42', 'ulkesh', 'zathras' ]);
     });
@@ -47,7 +42,7 @@ describe("downloadFromTracker", function() {
   describe("#generateListOfPeople marking active vs. inactive", function() {
     var peopleById;
     beforeEach(function() {
-      peopleById = downloadFromTracker.generateListOfPeople(projectList);
+      peopleById = downloadFromTracker.generateListOfPeople(JSON.parse(JSON.stringify(projectList)));
       listOfPeople = _(peopleById).values();
     });
 
@@ -112,7 +107,7 @@ describe("downloadFromTracker", function() {
 
   function findPerson(name) {
     return _(listOfPeople).detect(function(person) {
-      return person.person.name == name;
+      return person.name == name;
     });
   }
 
@@ -121,7 +116,7 @@ describe("downloadFromTracker", function() {
   var projectList = [
       {
         name: 'Develop New Cruiser (White Star)',
-        id: '17',
+        id: 17,
         version: 420,
         epics: [
           {
@@ -215,7 +210,7 @@ describe("downloadFromTracker", function() {
             }
           },
           {
-            id: 2551933,
+            id: 2551934,
             role: 'member',
             last_viewed_at: 1371603291000,
             person: {
@@ -227,7 +222,7 @@ describe("downloadFromTracker", function() {
             }
           },
           {
-            id: 2551933,
+            id: 2551955,
             role: 'viewer',
             last_viewed_at: 0,
             person: {
@@ -265,6 +260,18 @@ describe("downloadFromTracker", function() {
           }
         ],
         memberships: [
+          {
+            id: 2551932,
+            role: 'member',
+            last_viewed_at: 1371603288000,
+            person: {
+              kind: 'person',
+              id: 627611,
+              initials: 'u',
+              username: 'ulkesh',
+              name: 'Ulkesh Naranek'
+            }
+          },
           {
             id: 251930,
             role: 'owner',
