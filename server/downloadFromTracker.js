@@ -91,17 +91,17 @@
     console.log(_(peopleById).keys().length + " unique members");
     var people = _(peopleById).values();
     _.chain(people)
-	.sortBy(function(membership) {
-	  var baseline = membership.active ? TOO_BIG_TO_BE_MILLIS : 0;
-	  if (typeof membership.last_viewed_at === 'undefined') { return baseline; }
-	  return baseline + membership.last_viewed_at;
+	.sortBy(function(person) {
+	  var baseline = person.active ? TOO_BIG_TO_BE_MILLIS : 0;
+	  if (typeof person.last_viewed_at === 'undefined') { return baseline; }
+	  return baseline + person.last_viewed_at;
 	})
 	.reverse()
-	.each(function(membership) {
-	  var lastViewedAt = (typeof membership.last_viewed_at === 'undefined') ?
-	      '    undefined' : membership.last_viewed_at;
-	  var activity = membership.active ? " (active) " : "(inactive)";
-	  console.log("    " + lastViewedAt + ":  " + activity + " " + membership.person.id + " " + membership.person.name);
+	.each(function(person) {
+	  var lastViewedAt = (typeof person.last_viewed_at === 'undefined') ?
+	      '    undefined' : person.last_viewed_at;
+	  var activity = person.active ? " (active) " : "(inactive)";
+	  console.log("    " + lastViewedAt + ":  " + activity + " " + person.id + " " + person.name);
 	});
   }
   module.exports.logResults = logResults;
@@ -186,23 +186,22 @@
 	if (err) { throw "unhandled error"; }
 	if (people.length > 1) { throw "unhandled error"; }
 
-	var membership = peopleById[personId];
+	var person_hash = peopleById[personId];
 
 	if (people.length == 1) {
-	  var person_hash = membership.person;
 	  var db_person = people[0];
 
 	  db_person.name = person_hash.name;
 	  db_person.username = person_hash.username;
 	  db_person.initials = person_hash.initials;
 	  db_person.email = person_hash.email;
-	  db_person.autoStatus = (membership.active ? 'active' : 'inactive');
+	  db_person.autoStatus = (person_hash.active ? 'active' : 'inactive');
 
 	  db_person.save();
 	}
 	else {
-	  var person = _.clone(membership.person);
-	  person.autoStatus = membership.active ? 'active' : 'inactive';
+	  var person = _.clone(person_hash);
+	  person.autoStatus = person.active ? 'active' : 'inactive';
 	  person.explicitStatus = '';
 
 	  (new Person(person)).save();

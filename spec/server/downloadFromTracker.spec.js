@@ -72,7 +72,7 @@ describe("downloadFromTracker", function() {
   });
 
   describe("#logResults(peopleById) -> calls console.log() with output", function() {
-    it("generates output for one person", function() {
+    it("generates output for no people", function() {
       var peopleById = {};
       downloadFromTracker.logResults(peopleById);
       expect(collectedLogLines).toEqual(
@@ -83,16 +83,14 @@ describe("downloadFromTracker", function() {
     it("generates output for one person", function() {
       var peopleById = {
           '10': {
+              'membership_id': 1010,
               'role': 'member',
-              'id': '1010',
-              'person': {
-		  'email': 'alpha+pairmatic@example.com',
-		  'username': "alpha's pairmatic",
-		  'initials': 'apm',
-		  'name': "PairMatic role user for Alpha's team",
-		  'kind': 'person',
-		  'id': 10
-              }
+	      'active': false,
+	      'id': 10,
+	      'name': "PairMatic role user for Alpha's team",
+	      'initials': 'apm',
+	      'username': "alpha's pairmatic",
+	      'email': 'alpha+pairmatic@example.com'
           }
       };
 
@@ -100,6 +98,16 @@ describe("downloadFromTracker", function() {
 
       expect(collectedLogLines).toEqual(
 "----------------------------------------------------\n1 unique members\n        undefined:  (inactive) 10 PairMatic role user for Alpha's team\n"
+      );
+    });
+
+    it("handles a typical project set's people", function() {
+      var peopleById = downloadFromTracker.generateListOfPeople(JSON.parse(JSON.stringify(projectList)));
+
+      downloadFromTracker.logResults(peopleById);
+
+      expect(collectedLogLines).toEqual(
+"----------------------------------------------------\nReceived project 'Develop New Cruiser (White Star)' (id #17), 5 memberships\nReceived project 'Transport Babylon 4 Back in Time' (id #4), 4 memberships\n----------------------------------------------------\n7 unique members\n    1371603291000:   (active)  26761 Draal (The Great Machine)\n    1371603291000:   (active)  25385 Inesval\n    1371603291000:   (active)  2766 Zathras\n    1371063921000:   (active)  27161 Jenimer of the Grey\n    1370203291000:   (active)  627431 Entil'Zha Sinclair\n    1371603291000:  (inactive) 627611 Ulkesh Naranek\n    0:  (inactive) 126765 Pairmatic Role User\n"
       );
     });
   });
