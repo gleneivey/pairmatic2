@@ -2,9 +2,9 @@ var _ = require('underscore');
 
         
 var serverConfigurationData = null;
+var roleUserPersonId = null;
 var projectList = [];
 var peopleById = {};
-
 
 
         //// obtain initial data from Pivotal Tracker
@@ -12,11 +12,12 @@ var dFT = require('./server/downloadFromTracker');
 var om = require('./server/om');
 
 dFT.doit()
-  .onFulfill(function(sCD, pL, pBI) {
+  .onFulfill(function(sCD, pL, pBI, rUPI) {
     serverConfigurationData = sCD;
+    roleUserPersonId = rUPI;
     projectList = pL;
     peopleById = pBI;
-    om.init(projectList, peopleById);
+    om.init(projectList, peopleById, roleUserPersonId);
     dFT.logResults(peopleById);
   });
 

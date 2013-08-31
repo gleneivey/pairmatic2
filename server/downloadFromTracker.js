@@ -140,16 +140,20 @@
       .then(function() {
 	loadProjectsList(serverConfigurationData)
 	  .then(function(projectList) {
-	    peopleById = generateListOfPeople(projectList);
-	    downloadPromise.fulfill(
-		serverConfigurationData,
-		projectList,
-		peopleById
-	    );
-	  })
-	  .then(function() {
-	    updatePeopleInDbFromProjects(peopleById);
-	  });
+            loadMe(serverConfigurationData)
+              .then(function(meHash) {
+		peopleById = generateListOfPeople(projectList);
+		downloadPromise.fulfill(
+		    serverConfigurationData,
+		    projectList,
+		    peopleById,
+		    meHash.id
+		);
+	      })
+	      .then(function() {
+		updatePeopleInDbFromProjects(peopleById);
+	      });
+          });
       });
   }
 
@@ -171,13 +175,35 @@
 	    .on('data', function(chunk) { dataChunks.push(chunk.toString()); })
 	    .on('end', function() {
 	      var body = dataChunks.join('');
-	      projectList = JSON.parse(body);
-	      promiseProjectList.fulfill(projectList);
+	      promiseProjectList.fulfill(JSON.parse(body));
 	    });
 	}
     );
 
     return promiseProjectList;
+  }
+
+  function loadMe(serverConfigurationData) {
+    var promiseMe = new Promise();
+    https.get(
+	{
+	  hostname: 'www.pivotaltracker.com',
+	  path: '/services/v5/me?date_format=millis',
+	  headers: {
+	      'X-TrackerToken': serverConfigurationData.apiToken
+	  }
+	}, function(response) {
+	  var dataChunks = [];
+	  response
+	    .on('data', function(chunk) { dataChunks.push(chunk.toString()); })
+	    .on('end', function() {
+	      var body = dataChunks.join('');
+	      promiseMe.fulfill(JSON.parse(body));
+	    });
+	}
+    );
+
+    return promiseMe;
   }
 
   function updatePeopleInDbFromProjects(peopleById) {

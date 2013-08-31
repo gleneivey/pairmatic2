@@ -3,16 +3,16 @@
 
   var projectList;
   var processedPeople;
-  var rolePersonId;
+  var roleUserPersonId;
 
-  module.exports.init = function init(pL, peopleById, rPI) {
+  module.exports.init = function init(pL, peopleById, rUPI) {
     projectList = pL;
-    rolePersonId = rPI;
+    roleUserPersonId = rUPI;
 
     processedPeople = _
         .chain(peopleById)
         .select(function(person, idString) {
-          return person.id != rolePersonId;
+          return person.id != roleUserPersonId;
         })
         .map(function(person) {
           var formatted = {

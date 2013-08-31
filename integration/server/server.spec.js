@@ -20,8 +20,6 @@ describe("server's '/om' endpoint", function() {
       var responseHash = JSON.parse(response_body);
       expect(responseHash.projects).toEqual([]);
       expect(_(responseHash.people).sortBy('id')).toEqual([
-        { id: 1098128, name: 'GEI-Pairmatic Testing-Role User', initials: 'GTU', username: 'geipairmatict',
-          active: false, email: 'gleneivey+pairmatic-role@gmail.com' },
         { id: 1098130, name: 'GEI-Pairmatic Testing-Owner1', initials: 'PTO1', username: 'geipairmatictestingowner1',
           active: false, email: 'gleneivey+pairmatic-owner1@gmail.com' },
         { id: 1098164, name: 'GEI-Pairmatic Testing-Owner2', initials: 'PTO2', username: 'geipairmatictestingowner2',
