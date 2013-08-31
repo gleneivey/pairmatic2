@@ -24,7 +24,6 @@
     "mpromise": "0.3.0"
   },
   "devDependencies": {
-    "universal-jst": "~1.0.5",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
     "grunt-forever": "~0.4.1",
