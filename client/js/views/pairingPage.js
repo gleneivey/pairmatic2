@@ -1,7 +1,8 @@
 
 (function() {
   var exports = this;
-  var pairmatic = _.namespace(exports, 'pairmatic');
+  exports.pairmatic = exports.pairmatic || {};
+  var pairmatic = exports.pairmatic;
 
   var pairingPage = Backbone.View.extend({
     events: {
