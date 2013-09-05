@@ -1,7 +1,7 @@
 (function() {
   var exports = this;
-  exports.pairmatic = exports.pairmatic || {};
-  var pairmatic = exports.pairmatic;
+  var pairmatic = exports.pairmatic = exports.pairmatic || {};
+  pairmatic.models = pairmatic.models || {};
 
   function App() {
     requirejs.config({
@@ -9,8 +9,10 @@
 	paths: { views: 'views'	}
     });
 
-    var views = [ 'views/pairingPage' ];
-    var requireds = ['templates'].concat(views);
+    var models = [ 'models/om', 'models/person', 'models/people' ];
+    var views  = [ 'views/pairingPage' ];
+
+    var requireds = ['templates'].concat(models).concat(views);
     require(requireds, function(){
       pairmatic.app.run();
     });
@@ -26,9 +28,14 @@
 	  $: function(selector) { return this.$el.find(selector); },
       });
 
-      var root = new pairmatic.pairingPage({ el: pairmatic.$el });
+      pairmatic.models.people = new pairmatic.models.People();
+      var om = pairmatic.models.om = new pairmatic.models.Om();
+
+      var root = new pairmatic.views.pairingPage({ el: pairmatic.$el });
       root.render();
       pairmatic.rootView = root;
+
+      om.fetch({reset: true});
     }
   });
 

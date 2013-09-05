@@ -5,6 +5,8 @@ describe("server's '/om' endpoint", function() {
   it("should respond with the expected list of people", function(done) {
     var response_body = null;
 
+    waits(10000);
+
     runs(function() {
       request("http://localhost:8889/om",
           function(error, response, body){

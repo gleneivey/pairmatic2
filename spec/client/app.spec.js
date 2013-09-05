@@ -28,8 +28,7 @@ describe("App", function() {
   describe("#run", function() {
     var pairingPageMockView;
     beforeEach(function() {
-      pairingPageMockView = mockView();
-      pairmatic.pairingPage = pairingPageMockView;
+      pairingPageMockView = mockView(pairmatic.views, 'pairingPage');
       subject.run();
     });
 
@@ -46,8 +45,8 @@ describe("App", function() {
     });
   });
 
-  function mockView() {
-    var mockViewClass = jasmine.createSpy('mockView');
+  function mockView(spyScope, spyClass) {
+    var mockViewClass = spyOn(spyScope, spyClass);
 
     var fakeInstance = { wasRendered: false };
     fakeInstance.__proto__ = mockViewClass;

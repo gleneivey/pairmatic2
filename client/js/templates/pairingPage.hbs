@@ -1,4 +1,12 @@
-
-<p>
-  What ho!  Content from a Handlebars template.
-</p>
+<div id='root'>
+  <ol id='activeUsers'>
+    {{#each activeUsers}}
+      <li>{{name}}</li>
+    {{/each}}
+  </ol>
+  <ol id='inactiveUsers'>
+    {{#each inactiveUsers}}
+      <li>{{name}}</li>
+    {{/each}}
+  </ol>
+</div>
