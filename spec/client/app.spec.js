@@ -27,8 +27,13 @@ describe("App", function() {
 
   describe("#run", function() {
     var pairingPageMockView;
+    var om;
+
     beforeEach(function() {
       pairingPageMockView = mockView(pairmatic.views, 'pairingPage');
+      om = new pairmatic.models.Om();
+      spyOn(pairmatic.models, 'Om').and.callReturn(om);
+      spyOn(om, 'fetch');
       subject.run();
     });
 
@@ -42,6 +47,10 @@ describe("App", function() {
       expect(pairingPageMockView).toHaveBeenCalled();
       expect(pairmatic.rootView.wasRendered).toBe(true);
       expect(pairmatic.rootView).toEqual(pairingPageMockView.viewInstance);
+    });
+
+    it("starts the load from /om", function() {
+      expect(om.fetch).toHaveBeenCalledWith({reset: true});
     });
   });
 
