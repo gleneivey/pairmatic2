@@ -1,0 +1,59 @@
+#users {
+  width: 25%;
+  float: right;
+}
+
+.avatar {
+  float: right;
+  margin: 3px;
+  position: relative;
+  height: 64px;
+  overflow: hidden;
+
+  div  {
+    position: relative;
+    top: -18px;
+    height: 18px;
+    width: 64px;
+    overflow: hidden;
+    text-align: center;
+    color: white;
+    text-shadow: black 0.1em 0.1em 0.2em;
+  }
+}
+
+#inactiveMenu {
+  clear: both;
+  width: 100%;
+  text-align: center;
+  padding-top: 14px;
+  position: relative;
+
+  #inactiveMenuButton {
+    background-color: #ddd;
+    display: inline-block;
+    padding: 3px;
+
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+  }
+    
+  ul {
+    list-style: none;
+    text-align: left;
+    position: absolute;
+    bottom: 15;
+    left: 25;
+    background-color: white;
+    padding: 12px 15px;
+    border: solid black 1px;
+
+    &.closed {
+      display: none;
+    }
+    &.open {
+      display: block;
+    }
+  }
+}

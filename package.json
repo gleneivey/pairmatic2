@@ -30,6 +30,7 @@
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-jasmine-node": "~0.1.1",
     "grunt-contrib-handlebars": "~0.5.10",
+    "grunt-sass": "~0.6.1",
     "grunt-env": "~0.4.0",
     "jasmine-node": "git://github.com/gleneivey/jasmine-node.git#719a8a67d74c750c59d4d713dc0133ec29790138",
     "request": "~2.22.0",

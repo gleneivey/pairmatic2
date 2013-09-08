@@ -28,12 +28,14 @@ dFT.doit()
 var restify = require('restify');
 var server = restify.createServer();
 
+
 om.init(projectList, peopleById);
 server.get('/om', om.respond);
 server.head('/om', om.respond);
 
 server.get(/^\/.*$/, restify.serveStatic({
     directory: './client/',
+    maxAge: 0,
     default: 'index.html'
 }));
 

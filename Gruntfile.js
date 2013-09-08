@@ -6,6 +6,11 @@ module.exports = function(grunt) {
     handlebars: { compile: {
         files: { "client/js/templates.js": ["client/js/templates/*.hbs"] }
     } },
+    sass: { dist: {
+      files: {
+        'client/stylesheets/pairmatic.css': 'client/stylesheets/scss/*.scss'
+      }
+    } },
     forever: { options: { index: 'server.js' } },
     env: { test: { PAIRMATIC_DB_EXTENSION: "_test" } },
     "jasmine-node": {
@@ -22,6 +27,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-forever');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-handlebars');
+  grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-jasmine-node');
 
 
@@ -29,7 +35,7 @@ module.exports = function(grunt) {
     'integration',
     "Run HTTP and browser integration tests against a freshly-launched server",
     [
-      'handlebars', 'env:test', 'forever:start',
+      'build', 'env:test', 'forever:start',
           'jasmine-setup:integration', 'jasmine-node',
       'forever:stop'
     ]
@@ -48,6 +54,6 @@ module.exports = function(grunt) {
   );
 
 
-  grunt.registerTask('default',
-      ['jshint', 'server-unit', 'integration']);
+  grunt.registerTask('build', ['handlebars', 'sass']);
+  grunt.registerTask('default', ['jshint', 'server-unit', 'integration']);
 };

@@ -21,26 +21,57 @@ describe("views.pairingPage", function() {
     expect(people.toJSON).toHaveBeenCalled();
   });
 
-  it("should pass right active/inactive lists to template", function() {
-    spyOn(JST, 'client/js/templates/pairingPage.hbs');
-    var people = [
-      { active: true,  name: 'one' },
-      { active: false, name: 'two' },
-      { active: false, name: 'three' },
-      { active: true,  name: 'four' }
-    ]
+  describe("values passed to template", function() {
+    var capturedTemplateArgs;
 
-    pairmatic.models.people.reset(people);
+    beforeEach(function() {
+      spyOn(JST, 'client/js/templates/pairingPage.hbs').and.callFake(
+          function(infoHash) { capturedTemplateArgs = infoHash; } );
+    });
 
-    expect(JST['client/js/templates/pairingPage.hbs']).toHaveBeenCalledWith({
-      activeUsers:   [
+    it("should pass right active/inactive lists to template", function() {
+      var people = [
 	{ active: true,  name: 'one' },
-	{ active: true,  name: 'four' }
-      ],
-      inactiveUsers: [
 	{ active: false, name: 'two' },
-	{ active: false, name: 'three' }
+	{ active: false, name: 'three' },
+	{ active: true,  name: 'four' }
       ]
+
+      pairmatic.models.people.reset(people);
+
+      // only assert against fields we sent in....
+      capturedTemplateArgs.activeUsers =
+          _(capturedTemplateArgs.activeUsers  ).map(function(personHash) {
+              return { active: personHash.active, name: personHash.name }; });
+      capturedTemplateArgs.inactiveUsers =
+          _(capturedTemplateArgs.inactiveUsers).map(function(personHash) {
+              return { active: personHash.active, name: personHash.name }; });
+
+      expect(JST['client/js/templates/pairingPage.hbs']).toHaveBeenCalled();
+      expect(capturedTemplateArgs).toEqual({
+	activeUsers:   [
+	  { active: true,  name: 'one' },
+	  { active: true,  name: 'four' }
+	],
+	inactiveUsers: [
+	  { active: false, name: 'two' },
+	  { active: false, name: 'three' }
+	]
+      });
+    });
+
+    it("should send email addresses as their md5 hashes", function() {
+      var people = [
+	{ active: true,  name: 'one', email: 'one@example.com' },
+	{ active: false, name: 'two', email: 'two@three.four' }
+      ]
+
+      pairmatic.models.people.reset(people);
+
+      expect(JST['client/js/templates/pairingPage.hbs']).toHaveBeenCalledWith({
+	activeUsers:   [{ active: true,  name: 'one', email: hex_md5('one@example.com') }],
+	inactiveUsers: [{ active: false, name: 'two', email: hex_md5('two@three.four') }]
+      });
     });
   });
 });

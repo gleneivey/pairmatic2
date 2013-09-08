@@ -1,5 +1,7 @@
 config.js
 client/js/templates.js
+client/stylesheets/pairmatic.css
+
 node_modules
 forever
 

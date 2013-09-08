@@ -7,20 +7,42 @@
   function renderView() {
     var modelsJson = models.people.toJSON();
     this.$el.html( JST['client/js/templates/pairingPage.hbs']({
-      activeUsers: _(modelsJson).select(function(personHash) {
+      activeUsers: _(modelsJson)
+          .chain()
+          .select(function(personHash) {
             return personHash.active;
-          }),
-      inactiveUsers: _(modelsJson).select(function(personHash) {
+          })
+          .map(function(personHash) {
+            personHash.email = hex_md5(personHash.email || '');
+            return personHash;
+          })
+          .value(),
+      inactiveUsers: _(modelsJson)
+          .chain()
+          .select(function(personHash) {
             return !personHash.active;
-          }),
+          })
+          .map(function(personHash) {
+            personHash.email = hex_md5(personHash.email || '');
+            return personHash;
+          })
+          .value()
     }) );
     return this;
+  }
+
+  function toggleInactiveMenu(e) {
+    $('#inactiveUsers').toggleClass("open closed");
   }
 
   var pairingPage = Backbone.View.extend({
     initialize: function() {
       var self = this;
       models.people.on('reset change', function() { renderView.call(self); });
+    },
+
+    events: {
+      "click #inactiveMenu": toggleInactiveMenu
     },
 
     render: renderView

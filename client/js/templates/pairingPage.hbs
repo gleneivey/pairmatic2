@@ -1,12 +1,19 @@
-<div id='root'>
-  <ol id='activeUsers'>
+<div id='users'>
+  <div id='activeUsers'>
     {{#each activeUsers}}
-      <li>{{name}}</li>
+      <div id="img{{username}}" class="avatar">
+        <img src="http://www.gravatar.com/avatar/{{email}}?s=64" title="{{name}}"/>
+        <div>{{name}}</div>
+      </div>
     {{/each}}
-  </ol>
-  <ol id='inactiveUsers'>
-    {{#each inactiveUsers}}
-      <li>{{name}}</li>
-    {{/each}}
-  </ol>
+  </div>
+
+  <div id='inactiveMenu'>
+    <div id='inactiveMenuButton'>Inactive Members</div>
+    <ul id='inactiveUsers' class='closed'>
+      {{#each inactiveUsers}}
+	<li>{{name}}</li>
+      {{/each}}
+    </ul>
+  </div>
 </div>
