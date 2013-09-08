@@ -29,7 +29,7 @@ var restify = require('restify');
 var server = restify.createServer();
 
 
-om.init(projectList, peopleById);
+om.init(projectList, peopleById, roleUserPersonId);
 server.get('/om', om.respond);
 server.head('/om', om.respond);
 

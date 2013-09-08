@@ -26,6 +26,7 @@
 
 	  return formatted;
 	})
+        .shuffle()
         .value();
   };
 
