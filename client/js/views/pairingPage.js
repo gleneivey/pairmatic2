@@ -28,6 +28,9 @@
           })
           .value()
     }) );
+
+   $('.avatar').draggable();    // TODO:  does this leak, or double-set event handlers, when we rerender?
+
     return this;
   }
 

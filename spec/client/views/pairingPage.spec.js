@@ -21,6 +21,19 @@ describe("views.pairingPage", function() {
     expect(people.toJSON).toHaveBeenCalled();
   });
 
+  it("marks avatars as draggable when rendered", function() {
+    var spiedOnWrappedSelector;
+    setupSpyOnJquery('.avatar', function(spiedObject) {
+      spiedOnWrappedSelector = spiedObject;
+      spyOn(spiedObject, 'draggable');
+    });
+    
+
+    subject.render();
+
+    expect(spiedOnWrappedSelector.draggable).toHaveBeenCalled();
+  });
+
   describe("values passed to template", function() {
     var capturedTemplateArgs;
 
