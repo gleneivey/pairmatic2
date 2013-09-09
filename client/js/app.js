@@ -21,11 +21,11 @@
   _.extend(App.prototype, {
     run: function() {
       var $el = $('#root');
-
       _.extend(pairmatic, {
 	  el: $el[0],
 	  $el: $el,
 	  $: function(selector) { return this.$el.find(selector); },
+	  socket: io.connect('/')
       });
 
       pairmatic.models.people = new pairmatic.models.People();

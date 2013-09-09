@@ -29,9 +29,20 @@
           .value()
     }) );
 
-   $('.avatar').draggable();    // TODO:  does this leak, or double-set event handlers, when we rerender?
+      // TODO:  does this leak, or double-set event handlers, when we rerender?
+    $('.avatar').draggable({
+      drag: dragAvatar
+    });
 
     return this;
+  }
+
+  function dragAvatar(event, ui) {
+    pairmatic.socket.emit('move', {
+      top: ui.position.top,
+      left: ui.position.left,
+      avatarId: ui.helper[0].id
+    });
   }
 
   function toggleInactiveMenu(e) {
@@ -42,6 +53,9 @@
     initialize: function() {
       var self = this;
       models.people.on('reset change', function() { renderView.call(self); });
+      pairmatic.socket.on('move', function(data) {
+        $('#' + data.avatarId).css({ top: data.top, left: data.left });
+      });
     },
 
     events: {

@@ -20,6 +20,7 @@
   "dependencies": {
     "underscore": "1.5.1",
     "restify": "2.6.0",
+    "socket.io": "0.9.16",
     "mongoose": "3.6.15",
     "mpromise": "0.3.0"
   },

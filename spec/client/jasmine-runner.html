@@ -17,6 +17,7 @@
     <script type="text/javascript"              src="lib/backbone-min.js"></script>
     <script type="text/javascript"              src="lib/require.min.js"></script>
     <script type="text/javascript" src="../../client/js/lib/handlebars.1.0.0.runtime.js"></script>
+    <script type="text/javascript" src="../../client/js/lib/socket.io.js"></script>
     <script type="text/javascript" src="../../client/js/lib/md5-min.js"></script>
 
     <!-- include source files here... -->
@@ -36,6 +37,14 @@
     <script type="text/javascript"                 src="models/people.spec.js"></script>
     <script type="text/javascript"                 src="models/om.spec.js"></script>
     <script type="text/javascript"                 src="views/pairingPage.spec.js"></script>
+
+    <!-- stub out socket.io, no server when these specs run -->
+    <script type="text/javascript">
+      io.originalConnect = io.connect;
+      io.connect = function(path) {
+        return { on: function(){} };
+      };
+    </script>
   </head>
 
   <body>
