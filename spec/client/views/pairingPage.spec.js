@@ -27,7 +27,6 @@ describe("views.pairingPage", function() {
       spiedOnWrappedSelector = spiedObject;
       spyOn(spiedObject, 'draggable');
     });
-    
 
     subject.render();
 
@@ -43,13 +42,7 @@ describe("views.pairingPage", function() {
     });
 
     it("should pass right active/inactive lists to template", function() {
-      var people = [
-	{ active: true,  name: 'one' },
-	{ active: false, name: 'two' },
-	{ active: false, name: 'three' },
-	{ active: true,  name: 'four' }
-      ]
-
+      var people = simplePeopleListFixture();
       pairmatic.models.people.reset(people);
 
       // only assert against fields we sent in....
@@ -74,11 +67,7 @@ describe("views.pairingPage", function() {
     });
 
     it("should send email addresses as their md5 hashes", function() {
-      var people = [
-	{ active: true,  name: 'one', email: 'one@example.com' },
-	{ active: false, name: 'two', email: 'two@three.four' }
-      ]
-
+      var people = simplePeopleListFixture().slice(0,2);
       pairmatic.models.people.reset(people);
 
       expect(JST['client/js/templates/pairingPage.hbs']).toHaveBeenCalledWith({

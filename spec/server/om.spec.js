@@ -1,3 +1,4 @@
+var fixtures = require('./fixtures');
 var _ = require('underscore');
 
 
@@ -29,6 +30,7 @@ describe("om", function() {
   });
 
   it("returns a list of people", function() {
+    var listOfPeople = fixtures.listOfPeopleFixture();
     var peopleById = {};
     _(listOfPeople).each(function(person) {
       peopleById[person.id.toString()] = person;
@@ -61,59 +63,4 @@ describe("om", function() {
     expect(_(response.people).sortBy('id'))
         .toEqual(_(expectedPeople).sortBy('id'));
   });
-
-
-  var listOfPeople = [
-    {
-      membership_id: 2551933,
-      role: 'owner',
-      last_viewed_at: 1371603291000,
-      active: true,
-      id: 627611,
-      name: 'Ulkesh Naranek',
-      initials: 'u',
-      username: 'ulkesh',
-      email: 'u@vorlon.vorlon'
-    },
-    {
-      membership_id: 5293351,
-      role: 'owner',
-      last_viewed_at: 1371063921000,
-      id: 27161,
-      name: 'Jenimer of the Grey',
-      initials: 'jen',
-      username: 'jenimer',
-      email: 'jenimer@grey.minbar.minbari'
-    },
-    {
-      membership_id: 2733915,
-      role: 'member',
-      last_viewed_at: 1370203291000,
-      id: 627431,
-      name: "Entil'Zha Sinclair",
-      initials: 'js',
-      username: 'jeff',
-      email: 'entilzha@grey.minbar.minbari'
-    },
-    {
-      membership_id: 2551933,
-      role: 'member',
-      last_viewed_at: 1371603291000,
-      id: 25385,
-      name: 'Inesval',
-      initials: 'ine',
-      username: 'inesval',
-      email: 'inesval@worker.minbar.minbari'
-    },
-    {
-      membership_id: 2551933,
-      role: 'member',
-      last_viewed_at: 0,
-      id: 126765,
-      name: 'Pairmatic Role User',
-      initials: 'pairmatic',
-      username: 'pairmatic42',
-      email: 'jenimer+pairmatic@grey.minbar.minbari'
-    }
-  ];
 });

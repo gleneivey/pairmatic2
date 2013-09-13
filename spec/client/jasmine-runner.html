@@ -29,7 +29,13 @@
     <script type="text/javascript" src="../../client/js/app.js"></script>
 
     <!-- include spec helper files here... -->
+    <script type="text/javascript">
+        // make a fake module.exports connected to window so we can load things that are also require'd
+      module = {};
+      module.exports = window;
+    </script>
     <script type="text/javascript"                 src="specHelper.js"></script>
+    <script type="text/javascript"                 src="fixtures.js"></script>
 
     <!-- include spec files here... -->
     <script type="text/javascript"                 src="app.spec.js"></script>
@@ -37,6 +43,7 @@
     <script type="text/javascript"                 src="models/people.spec.js"></script>
     <script type="text/javascript"                 src="models/om.spec.js"></script>
     <script type="text/javascript"                 src="views/pairingPage.spec.js"></script>
+    <script type="text/javascript"                 src="views/usersActiveDragDrop.spec.js"></script>
 
     <!-- stub out socket.io, no server when these specs run -->
     <script type="text/javascript">

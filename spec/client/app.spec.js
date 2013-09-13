@@ -41,6 +41,7 @@ describe("App", function() {
       expect(typeof pairmatic.el).toEqual('object');
       expect(pairmatic.$el.get(0)).toBe(pairmatic.el);
       expect(typeof pairmatic.$).toEqual('function');
+      expect(typeof pairmatic.socket).toEqual('object');
     });
 
     it("instantiates and renders the pairingPage view", function() {
