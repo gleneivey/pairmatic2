@@ -9,6 +9,8 @@ the assignment of pairs from a programming team.
 
 The project is hosted on GitHub at:  https://github.com/gleneivey/pairmatic2
 
+With documentation located in the wiki there:  https://github.com/gleneivey/pairmatic2/wiki
+
 PairMatic is FLOSS (Free/Libre/Open-Source Software), licensed under
 the AGPLv3.  See the file named COPYING distributed with PairMatic, or
 http://www.gnu.org/licenses/.
